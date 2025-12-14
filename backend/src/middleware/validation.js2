@@ -1,0 +1,190 @@
+// src/middleware/validation.js - Temporary version without Joi
+
+// Auth validations (your existing code)
+export const validateSignup = (req, res, next) => {
+    const { email, password, name } = req.body;
+
+    if (!email || !password || !name) {
+        return res.status(400).json({
+            success: false,
+            error: 'Email, password, and name are required'
+        });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            success: false,
+            error: 'Please provide a valid email address'
+        });
+    }
+
+    // Password validation
+    if (password.length < 8) {
+        return res.status(400).json({
+            success: false,
+            error: 'Password must be at least 8 characters long'
+        });
+    }
+
+    next();
+};
+
+export const validateLogin = (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({
+            success: false,
+            error: 'Email and password are required'
+        });
+    }
+
+    next();
+};
+
+// Social Media validations - simplified without Joi
+export const validateSocialMediaRequest = (req, res, next) => {
+    const { brandName, topic, brandVoice, platform, userId } = req.body;
+
+    const errors = [];
+
+    if (!brandName || brandName.trim().length === 0) {
+        errors.push('Brand name is required');
+    } else if (brandName.length > 100) {
+        errors.push('Brand name must be less than 100 characters');
+    }
+
+    if (!topic || topic.trim().length === 0) {
+        errors.push('Topic is required');
+    } else if (topic.length > 200) {
+        errors.push('Topic must be less than 200 characters');
+    }
+
+    if (!brandVoice || brandVoice.trim().length === 0) {
+        errors.push('Brand voice is required');
+    } else if (brandVoice.length > 50) {
+        errors.push('Brand voice must be less than 50 characters');
+    }
+
+    const validPlatforms = ['twitter', 'instagram', 'facebook', 'linkedin', 'tiktok'];
+    if (!platform || !validPlatforms.includes(platform)) {
+        errors.push('Platform must be one of: twitter, instagram, facebook, linkedin, tiktok');
+    }
+
+    if (!userId || userId.trim().length === 0) {
+        errors.push('User ID is required');
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            details: errors
+        });
+    }
+
+    req.validatedData = req.body;
+    next();
+};
+
+export const validateAnalysisRequest = (req, res, next) => {
+    const { content, platform, userId } = req.body;
+
+    const errors = [];
+
+    if (!content || content.trim().length === 0) {
+        errors.push('Content is required');
+    } else if (content.length > 5000) {
+        errors.push('Content must be less than 5000 characters');
+    }
+
+    const validPlatforms = ['twitter', 'instagram', 'facebook', 'linkedin', 'tiktok'];
+    if (!platform || !validPlatforms.includes(platform)) {
+        errors.push('Platform must be one of: twitter, instagram, facebook, linkedin, tiktok');
+    }
+
+    if (!userId || userId.trim().length === 0) {
+        errors.push('User ID is required');
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            details: errors
+        });
+    }
+
+    req.validatedData = req.body;
+    next();
+};
+
+export const validateHashtagRequest = (req, res, next) => {
+    const { topic, platform, userId } = req.body;
+
+    const errors = [];
+
+    if (!topic || topic.trim().length === 0) {
+        errors.push('Topic is required');
+    } else if (topic.length > 200) {
+        errors.push('Topic must be less than 200 characters');
+    }
+
+    const validPlatforms = ['twitter', 'instagram', 'facebook', 'linkedin', 'tiktok'];
+    if (!platform || !validPlatforms.includes(platform)) {
+        errors.push('Platform must be one of: twitter, instagram, facebook, linkedin, tiktok');
+    }
+
+    if (!userId || userId.trim().length === 0) {
+        errors.push('User ID is required');
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            details: errors
+        });
+    }
+
+    req.validatedData = req.body;
+    next();
+};
+
+export const validateHistoryRequest = (req, res, next) => {
+    const { userId } = req.params;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const errors = [];
+
+    if (!userId || userId.trim().length === 0) {
+        errors.push('User ID is required');
+    }
+
+    if (limit < 1 || limit > 100) {
+        errors.push('Limit must be between 1 and 100');
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            details: errors
+        });
+    }
+
+    req.validatedData = { userId, limit };
+    next();
+};
+
+// Export all functions
+export default {
+    validateSignup,
+    validateLogin,
+    validateSocialMediaRequest,
+    validateAnalysisRequest,
+    validateHashtagRequest,
+    validateHistoryRequest
+};

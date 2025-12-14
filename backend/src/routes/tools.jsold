@@ -1,0 +1,150 @@
+import express from 'express';
+import { generateAdCopyLogic } from '../toolLogic/adCopyLogic.js';
+import { analyzeHeadlineLogic } from '../toolLogic/headlineLogic.js';
+import { generateMetaTagsLogic } from '../toolLogic/seoMetaLogic.js';
+import { testSubjectLineLogic } from '../toolLogic/emailTesterLogic.js';
+import { generateContentIdeaLogic } from '../toolLogic/contentIdeaLogic.js';
+import { generateFunnelLogic } from '../toolLogic/funnelBuilderLogic.js';
+import { generateSocialMediaContent } from '../toolLogic/socialMediaLogic.js';
+
+const router = express.Router();
+
+// 1. Ad Copy Generator
+router.post('/ad-copy', async (req, res) => {
+    try {
+        if (!req.body.productName || !req.body.productDescription) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Product name and description required' 
+            });
+        }
+        const result = generateAdCopyLogic(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Ad Copy error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 2. Headline Analyzer
+router.post('/headline-analyzer', async (req, res) => {
+    try {
+        if (!req.body.headline) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Headline required' 
+            });
+        }
+        const result = analyzeHeadlineLogic(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Headline Analyzer error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 3. SEO Meta Generator
+router.post('/seo-meta', async (req, res) => {
+    try {
+        if (!req.body.pageTitle || !req.body.primaryKeyword) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Page title and primary keyword are required' 
+            });
+        }
+        
+        // This line runs the logic we just defined
+        const result = generateMetaTagsLogic(req.body); 
+        
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('SEO Meta Generator error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 4. Email Subject Tester
+router.post('/email-tester', async (req, res) => {
+    try {
+        if (!req.body.subjectLine) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Subject line required' 
+            });
+        }
+        const result = testSubjectLineLogic(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Email Tester error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 5. Content Idea Generator
+router.post('/content-idea', async (req, res) => {
+    try {
+        if (!req.body.niche || !req.body.targetAudience) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Niche and target audience required' 
+            });
+        }
+        const result = generateContentIdeaLogic(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Content Idea error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 6. Funnel Builder
+router.post('/funnel-builder', async (req, res) => {
+    try {
+        if (!req.body.businessName || !req.body.primaryOffer || !req.body.targetAudience) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Business name, primary offer, and target audience required' 
+            });
+        }
+        const result = generateFunnelLogic(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Funnel Builder error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 7. Social Media Generator
+router.post('/social-media-generator', async (req, res) => {
+    try {
+        if (!req.body.niche || !req.body.postQuantity) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Niche and post quantity required' 
+            });
+        }
+        const result = await generateSocialMediaContent(req.body);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Social Media error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get all available tools
+router.get('/list', (req, res) => {
+    res.json({
+        success: true,
+        tools: [
+            { id: 1, name: 'Ad Copy Generator', endpoint: '/ad-copy', description: 'Generate compelling ad copy' },
+            { id: 2, name: 'Headline Analyzer', endpoint: '/headline-analyzer', description: 'Analyze headline effectiveness' },
+            { id: 3, name: 'SEO Meta Generator', endpoint: '/seo-meta', description: 'Generate SEO meta tags' },
+            { id: 4, name: 'Email Subject Tester', endpoint: '/email-tester', description: 'Test email subject lines' },
+            { id: 5, name: 'Content Idea Generator', endpoint: '/content-idea', description: 'Generate content ideas' },
+            { id: 6, name: 'Funnel Builder', endpoint: '/funnel-builder', description: 'Build marketing funnels' },
+            { id: 7, name: 'Social Media Generator', endpoint: '/social-media-generator', description: 'Generate social media posts' }
+        ]
+    });
+});
+
+export default router;

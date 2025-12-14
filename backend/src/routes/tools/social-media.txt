@@ -1,0 +1,283 @@
+
+console.log('🧭 social-media router loaded — backend/src/routes/social-media.js');
+
+import express from 'express';
+import { generateSocialPosts, analyzePostPerformance, getTrendingHashtags } from '../controllers/aiController.js';
+import { validateSocialMediaRequest } from '../middleware/validation.js';
+import { rateLimit } from '../middleware/rateLimit.js';
+import { saveToDatabase, getUserHistory } from '../utils/database.js';
+
+const router = express.Router();
+
+/**
+ * Root index for the social-media router.
+ * This makes GET /api/social-media return a helpful endpoints list
+ * instead of falling through to the global notFound handler.
+ */
+router.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Social Media API root — available endpoints listed',
+    endpoints: {
+      generate: 'POST /api/social-media/generate',
+      generateContent: 'POST /api/social-media/generate-content',
+      analyze: 'POST /api/social-media/analyze',
+      trending: 'GET /api/social-media/trending/:platform',
+      accountsStatus: 'GET /api/social-media/accounts/status',
+      history: 'GET /api/social-media/history/:userId',
+      export: 'POST /api/social-media/export',
+      health: 'GET /api/social-media/health'
+    }
+  });
+});
+
+// Generate social media posts with AI
+router.post('/generate', rateLimit, validateSocialMediaRequest, async (req, res) => {
+  try {
+    const { brandName, topic, brandVoice, platform, userContent, userId, campaignId } = req.body;
+
+    console.log(`Generating social posts for brand: ${brandName}, platform: ${platform}`);
+
+    const result = await generateSocialPosts({
+      brandName,
+      topic,
+      brandVoice: brandVoice || 'professional',
+      platform,
+      userContent,
+      userId
+    });
+
+    if (userId) {
+      await saveToDatabase('social_posts', {
+        userId,
+        campaignId,
+        brandName,
+        platform,
+        topic,
+        variations: result.variations,
+        hashtags: result.hashtags,
+        generatedAt: new Date()
+      });
+    }
+
+    res.json({
+      success: true,
+      data: result,
+      metadata: {
+        generatedAt: new Date().toISOString(),
+        platform,
+        variationsCount: result.variations?.length ?? 0,
+        hashtagsCount: result.hashtags?.length ?? 0
+      }
+    });
+  } catch (error) {
+    console.error('Error generating social media posts:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate social media posts',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Analyze post performance
+router.post('/analyze', rateLimit, async (req, res) => {
+  try {
+    const { content, platform, targetAudience } = req.body;
+
+    const analysis = await analyzePostPerformance({
+      content,
+      platform,
+      targetAudience
+    });
+
+    res.json({ success: true, data: analysis });
+  } catch (error) {
+    console.error('Error analyzing post:', error);
+    res.status(500).json({ success: false, error: 'Failed to analyze post' });
+  }
+});
+
+// Get trending hashtags
+router.get('/trending/:platform', async (req, res) => {
+  try {
+    const { platform } = req.params;
+    const { category } = req.query;
+
+    const trending = await getTrendingHashtags(platform, category);
+
+    res.json({ success: true, data: trending });
+  } catch (error) {
+    console.error('Error fetching trending hashtags:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch trending hashtags' });
+  }
+});
+
+// Get user generation history
+router.get('/history/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { limit = 10, offset = 0 } = req.query;
+
+    const history = await getUserHistory(userId, 'social_posts', { limit, offset });
+
+    res.json({ success: true, data: history });
+  } catch (error) {
+    console.error('Error fetching user history:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch history' });
+  }
+});
+
+/**
+ * Placeholder exportPosts helper.
+ * Replace this with your real exporter or an import from utils/exporter.js
+ * if you have a richer implementation (CSV, XLSX, PDF, email sending, etc).
+ */
+const exportPosts = async (posts = [], format = 'json', email) => {
+  // minimal exporter — returns metadata. Replace with real export logic.
+  return {
+    exportedCount: Array.isArray(posts) ? posts.length : 0,
+    format,
+    emailSent: !!email
+  };
+};
+
+// Export posts in different formats
+router.post('/export', async (req, res) => {
+  try {
+    const { posts, format = 'json', email } = req.body;
+
+    const exportData = await exportPosts(posts, format, email);
+
+    res.json({
+      success: true,
+      data: exportData,
+      message: `Posts exported successfully as ${format}`
+    });
+  } catch (error) {
+    console.error('Error exporting posts:', error);
+    res.status(500).json({ success: false, error: 'Failed to export posts' });
+  }
+});
+
+// Generate AI Content (convenience endpoint)
+router.post('/generate-content', async (req, res) => {
+  try {
+    const { brandName, postTopic, platforms, brandVoice = 'professional', quantity = 3, targetAudience } = req.body;
+
+    console.log('🎯 Social Media Generation Request:', { brandName, platforms, brandVoice, quantity });
+
+    if (!brandName || !postTopic || !platforms || platforms.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: brandName, postTopic, platforms'
+      });
+    }
+
+    const posts = platforms.map((platform, index) => {
+      const platformTemplates = {
+        instagram: {
+          content: `🌟 ${brandName} 🌟\n\n${postTopic}\n\n✨ Perfect for your Instagram feed!\n\n#${brandName.replace(/\s+/g, '')} #${brandVoice} #Instagram`,
+          engagement: Math.floor(Math.random() * 5000) + 1000
+        },
+        twitter: {
+          content: `🚀 ${brandName} Update!\n\n${postTopic}\n\n#${brandName.replace(/\s+/g, '')} #${brandVoice} #Twitter`,
+          engagement: Math.floor(Math.random() * 1000) + 100
+        },
+        linkedin: {
+          content: `Professional Insight: ${brandName}\n\n${postTopic}\n\n#${brandName.replace(/\s+/g, '')} #${brandVoice} #LinkedIn`,
+          engagement: Math.floor(Math.random() * 2000) + 500
+        },
+        facebook: {
+          content: `📢 ${brandName} Community News!\n\n${postTopic}\n\n#${brandName.replace(/\s+/g, '')} #${brandVoice} #Facebook`,
+          engagement: Math.floor(Math.random() * 3000) + 800
+        }
+      };
+
+      const template = platformTemplates[platform] || platformTemplates.instagram;
+
+      return {
+        id: `post_${Date.now()}_${index}`,
+        platform,
+        content: template.content,
+        hashtags: [
+          `#${brandName.replace(/\s+/g, '')}`,
+          `#${brandVoice}`,
+          `#${platform.charAt(0).toUpperCase() + platform.slice(1)}`,
+          '#AIGenerated',
+          '#MeritLivesTools',
+          targetAudience ? `#${targetAudience.replace(/\s+/g, '')}` : '#Audience'
+        ],
+        engagement: template.engagement,
+        characterCount: template.content.length,
+        optimalPostingTime: '2:00 PM - 4:00 PM',
+        imageSuggestion: `${platform}-${brandVoice}-${index + 1}.jpg`
+      };
+    });
+
+    const response = {
+      success: true,
+      data: {
+        posts: posts.slice(0, quantity),
+        summary: {
+          totalPosts: quantity,
+          platforms,
+          brandVoice,
+          targetAudience: targetAudience || 'General audience',
+          totalEngagement: posts.reduce((sum, post) => sum + post.engagement, 0)
+        },
+        analysis: `Successfully generated ${quantity} ${brandVoice} posts targeting ${targetAudience || 'general audience'}`,
+        recommendations: [
+          `Post during ${posts[0].optimalPostingTime} for maximum engagement`,
+          'Use high-quality images matching your brand',
+          'Engage with comments within the first 2 hours',
+          'Experiment with different posting times',
+          'Use 3-5 relevant hashtags per platform'
+        ],
+        generatedAt: new Date().toISOString()
+      }
+    };
+
+    console.log('✅ Generated', response.data.posts.length, 'posts for', brandName);
+    res.json(response);
+  } catch (error) {
+    console.error('❌ Content generation error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate social media content',
+      details: error.message
+    });
+  }
+});
+
+// Get Social Media Accounts Status
+router.get('/accounts/status', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      connectedAccounts: 0,
+      availablePlatforms: [
+        { name: 'instagram', connected: false, username: null, stats: { posts: 0, followers: 0, engagement: '0%' } },
+        { name: 'twitter', connected: false, username: null, stats: { posts: 0, followers: 0, engagement: '0%' } },
+        { name: 'linkedin', connected: false, username: null, stats: { posts: 0, connections: 0, engagement: '0%' } },
+        { name: 'facebook', connected: false, username: null, stats: { posts: 0, likes: 0, engagement: '0%' } }
+      ]
+    }
+  });
+});
+
+// Health check for social media routes
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Social Media Generator API is healthy! 🚀',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      'POST /api/social-media/generate-content': 'Generate social media posts',
+      'GET /api/social-media/accounts/status': 'Get connected accounts status',
+      'GET /api/social-media/health': 'Health check'
+    }
+  });
+});
+
+export default router;

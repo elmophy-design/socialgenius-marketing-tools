@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Authentication - Meritlives Tools</title>
+    <style>
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f9fafc 0%, #e8f4ff 100%);
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e8f4ff;
+            border-top: 4px solid #004aad;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .message {
+            color: #004aad;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <div class="message">Completing Google authentication...</div>
+    </div>
+
+    <script>
+        // Handle Google OAuth callback
+        async function handleGoogleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+
+            if (error) {
+                console.error('Google OAuth error:', error);
+                window.location.href = 'login.html?error=google_auth_failed';
+                return;
+            }
+
+            if (code) {
+                try {
+                    // Exchange authorization code for tokens
+                    const response = await fetch('http://localhost:4000/api/auth/google/callback', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ code })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Store auth data and redirect to dashboard
+                        localStorage.setItem('meritlives_token', data.data.token);
+                        localStorage.setItem('meritlives_user', JSON.stringify(data.data.user));
+                        window.location.href = '../index.html';
+                    } else {
+                        throw new Error(data.error);
+                    }
+                } catch (error) {
+                    console.error('Google callback error:', error);
+                    window.location.href = 'login.html?error=auth_failed';
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Handle page load
+        document.addEventListener('DOMContentLoaded', handleGoogleCallback);
+    </script>
+</body>
+</html>
