@@ -4,17 +4,10 @@ import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
-// In src/index.js or your main server file
-import authRoutes from './routes/auth.js';
-
-// Add this after your other routes
-app.use('/api/auth', authRoutes);
-
-
 // Load environment variables FIRST
 dotenv.config();
 
-// Create Express app
+// Create Express app EARLY (before using it)
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -30,9 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================
-// IMPORT ROUTES
+// IMPORT ROUTES (After app is created)
 // ============================================
 
+// Auth Routes
+import authRoutes from './routes/auth.js';
 
 // Individual Tool Routes (from tools folder)
 import adCopyRoutes from "./routes/tools/ad-copy.js";
@@ -58,7 +53,6 @@ import toolsRoutes from "./routes/tools.js";
 
 // Auth
 app.use("/api/auth", authRoutes);
-
 
 // Individual Marketing Tools (detailed routes)
 app.use("/api/tools/ad-copy", adCopyRoutes);
@@ -126,7 +120,7 @@ app.use(errorHandler);
 // START SERVER
 // ============================================
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n✨ ==========================================`);
     console.log(`🚀 MERITLIVES TOOLS - UNIFIED SERVER`);
     console.log(`✨ ==========================================`);
@@ -146,3 +140,5 @@ app.listen(PORT, () => {
     console.log(`   • Value Proposition: /api/tools/value-prop`);
     console.log(`✨ ==========================================\n`);
 });
+
+export default app;
