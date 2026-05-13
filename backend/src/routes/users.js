@@ -20,7 +20,12 @@ import {
   uploadProfilePicture,
   getUserStats,
   updateSettings,
+  updateBrandVoice,
+  updatePaymentMethod,
   getConnectedAccounts,
+  getLoginActivity,
+  getInvoices,
+  downloadInvoice,
   connectSocialAccount,
   disconnectSocialAccount,
   getSubscription,
@@ -30,6 +35,11 @@ import {
   exportUserData,
   searchUsers
 } from '../controllers/userController.js';
+import User from '../models/User.js';
+import Subscription from '../models/Subscription.js';
+import ToolContent from '../models/Tool.js';
+import { sendSuccess } from '../utils/apiResponse.js';
+import { createUserNotification } from '../utils/notificationHelper.js';
 
 // Import middleware
 import { authenticateToken, requireAdmin } from '../middleware/auth.js';
@@ -37,6 +47,14 @@ import { asyncHandler } from '../middleware/errorHandler.js';
 import { updateProfileValidation, validate } from '../middleware/validator.js';
 
 const router = express.Router();
+
+class AppError extends Error {
+  constructor(message, statusCode = 500, code = 'APP_ERROR') {
+    super(message);
+    this.statusCode = statusCode;
+    this.code = code;
+  }
+}
 
 // ============================================
 // PROFILE ROUTES
@@ -100,6 +118,18 @@ router.post(
 );
 
 /**
+ * Update Payment Method
+ * POST /api/users/payment-method
+ * Body: { cardNumber, expiryDate, cvv, billingAddress: { address, city, zipCode } }
+ * Headers: Authorization: Bearer <token>
+ */
+router.post(
+  '/payment-method',
+  authenticateToken,
+  asyncHandler(updatePaymentMethod)
+);
+
+/**
  * Delete Profile Picture
  * DELETE /api/users/profile-picture
  */
@@ -135,6 +165,18 @@ router.get(
   '/stats',
   authenticateToken,
   asyncHandler(getUserStats)
+);
+
+/**
+ * Get User Login Activity
+ * GET /api/users/login-activity
+ * Returns a list of recent login activities
+ * Headers: Authorization: Bearer <token>
+ */
+router.get(
+  '/login-activity',
+  authenticateToken,
+  asyncHandler(getLoginActivity)
 );
 
 /**
@@ -199,6 +241,30 @@ router.get(
 );
 
 /**
+ * Get Invoices
+ * GET /api/users/invoices
+ * Returns a list of user's invoices
+ * Headers: Authorization: Bearer <token>
+ */
+router.get(
+  '/invoices',
+  authenticateToken,
+  asyncHandler(getInvoices)
+);
+
+/**
+ * Download Invoice
+ * GET /api/users/invoices/:invoiceId/download
+ * Downloads a specific invoice
+ * Headers: Authorization: Bearer <token>
+ */
+router.get(
+  '/invoices/:invoiceId/download',
+  authenticateToken,
+  asyncHandler(downloadInvoice)
+);
+
+/**
  * Upgrade Subscription
  * POST /api/users/subscription/upgrade
  */
@@ -257,6 +323,22 @@ router.post(
     const user = await User.findById(req.user.userId);
     user.subscription.plan = plan;
     await user.save();
+
+    // Create upgrade notification
+    try {
+      await createUserNotification(user._id, {
+        type: 'upgrade',
+        category: 'subscription',
+        title: 'Plan Upgraded Successfully!',
+        message: `You are now on the ${plan.toUpperCase()} plan. Enjoy your new enterprise-grade tools!`,
+        action: {
+          label: 'View Features',
+          url: '/dashboard'
+        }
+      });
+    } catch (notifyError) {
+      console.error('Upgrade notification error:', notifyError);
+    }
 
     return sendSuccess(
       res,
@@ -328,6 +410,20 @@ router.put(
   '/settings',
   authenticateToken,
   asyncHandler(updateSettings)
+);
+
+/**
+ * Update Brand Voice
+ * PUT /api/users/brand-voice
+ * 
+ * Updates user's brand voice settings
+ * Body: { voiceName?, tone?, targetAudience?, brandValues?, brandMission?, dos?, donts?, knowledgeBase? }
+ * Headers: Authorization: Bearer <token>
+ */
+router.put(
+  '/brand-voice',
+  authenticateToken,
+  asyncHandler(updateBrandVoice)
 );
 
 // ============================================

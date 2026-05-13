@@ -80,7 +80,7 @@ class AuthManager {
                 
                 // Redirect to dashboard after 2 seconds
                 setTimeout(() => {
-                    window.location.href = '../index.html';
+                    window.location.href = '/dashboard';
                 }, 2000);
             } else {
                 throw new Error(data.error);
@@ -121,7 +121,7 @@ class AuthManager {
                 
                 // Redirect to dashboard
                 setTimeout(() => {
-                    window.location.href = '../index.html';
+                    window.location.href = '/dashboard';
                 }, 1000);
             } else {
                 throw new Error(data.error);
@@ -186,7 +186,7 @@ class AuthManager {
 
             if (data.success) {
                 this.storeAuthData(data.data);
-                window.location.href = '../index.html';
+                window.location.href = '/dashboard';
             } else {
                 throw new Error(data.error);
             }
@@ -207,7 +207,7 @@ class AuthManager {
         if (this.token && this.user) {
             // User is logged in
             if (window.location.pathname.includes('auth/')) {
-                window.location.href = '../index.html';
+                window.location.href = '/dashboard';
             }
         } else {
             // User is not logged in
