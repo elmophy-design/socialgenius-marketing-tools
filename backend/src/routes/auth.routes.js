@@ -11,7 +11,11 @@ let users = [];
 
 // Generate JWT token
 const generateToken = (userId) => {
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    return jwt.sign(
+        { id: userId, userId },
+        process.env.JWT_SECRET || 'your-secret-key',
+        { expiresIn: '7d' }
+    );
 };
 
 // ===============================
@@ -180,6 +184,13 @@ router.post('/login', async (req, res) => {
         res.json({
             success: true,
             message: 'Login successful!',
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                isVerified: user.isVerified
+            },
             data: {
                 user: {
                     id: user.id,
@@ -237,6 +248,13 @@ router.post('/signup', async (req, res) => {
         res.json({
             success: true,
             message: 'Account created successfully!',
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                isVerified: user.isVerified
+            },
             data: {
                 user: {
                     id: user.id,

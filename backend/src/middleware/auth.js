@@ -11,7 +11,16 @@ export const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-      req.user = await User.findById(decoded.id).select('-password');
+      const userId = decoded.id || decoded.userId;
+
+      if (!userId) {
+        return res.status(401).json({
+          success: false,
+          message: 'Not authorized, invalid token payload'
+        });
+      }
+
+      req.user = await User.findById(userId).select('-password');
 
       if (!req.user) {
         return res.status(401).json({

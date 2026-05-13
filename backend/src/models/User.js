@@ -283,11 +283,52 @@ const userSchema = new mongoose.Schema({
     }
   },
 
+  // Brand Voice & Identity
+  brandVoice: {
+    voiceName: {
+      type: String,
+      default: 'Default Brand Voice'
+    },
+    tone: {
+      type: String,
+      default: 'Professional, helpful, and innovative'
+    },
+    targetAudience: {
+      type: String,
+      default: ''
+    },
+    brandValues: {
+      type: [String],
+      default: []
+    },
+    brandMission: {
+      type: String,
+      default: ''
+    },
+    dos: {
+      type: [String],
+      default: []
+    },
+    donts: {
+      type: [String],
+      default: []
+    },
+    knowledgeBase: [{
+      title: String,
+      content: String,
+      source: String,
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }]
+  },
+
   // Connected Social Accounts
   connectedAccounts: [{
     platform: {
       type: String,
-      enum: ['facebook', 'twitter', 'instagram', 'linkedin', 'tiktok'],
+      enum: ['facebook', 'twitter', 'instagram', 'linkedin', 'tiktok', 'youtube', 'pinterest'],
       required: true
     },
     accountId: {
@@ -297,6 +338,14 @@ const userSchema = new mongoose.Schema({
     accountName: {
       type: String,
       required: true
+    },
+    username: {
+      type: String,
+      default: ''
+    },
+    followers: {
+      type: Number,
+      default: 0
     },
     accessToken: {
       type: String,
@@ -309,6 +358,35 @@ const userSchema = new mongoose.Schema({
     connectedAt: {
       type: Date,
       default: Date.now
+    },
+    lastSynced: {
+      type: Date,
+      default: Date.now
+    },
+    status: {
+      type: String,
+      enum: ['active', 'pending', 'error'],
+      default: 'active'
+    },
+    provider: {
+      type: String,
+      default: 'native'
+    },
+    pageId: {
+      type: String,
+      default: ''
+    },
+    authorUrn: {
+      type: String,
+      default: ''
+    },
+    profileUrl: {
+      type: String,
+      default: ''
+    },
+    profilePicture: {
+      type: String,
+      default: ''
     },
     isActive: {
       type: Boolean,

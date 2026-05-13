@@ -6,6 +6,20 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { buildToolRecommendations } from '../utils/toolRecommendations.js';
+import { createUserNotification } from '../utils/notificationHelper.js';
+
+const extractMetadata = (user) => {
+  if (!user?.metadata) {
+    return {};
+  }
+
+  if (user.metadata instanceof Map) {
+    return Object.fromEntries(user.metadata.entries());
+  }
+
+  return user.metadata;
+};
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -23,7 +37,18 @@ const generateToken = (userId) => {
  */
 export const signup = async (req, res) => {
   try {
-    const { name, email, password, company } = req.body;
+    const {
+      name,
+      email,
+      password,
+      company,
+      businessType,
+      primaryGoal,
+      favoritePlatform,
+      experienceLevel,
+      interests = [],
+      activityPreferences = []
+    } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -42,16 +67,59 @@ export const signup = async (req, res) => {
       });
     }
 
+    const recommendedTools = buildToolRecommendations({
+      interests,
+      activityPreferences,
+      primaryGoal,
+      favoritePlatform,
+      businessType,
+      experienceLevel
+    });
+
     // Create user
     const user = await User.create({
       name,
       email: email.toLowerCase(),
       password, // Will be hashed by User model pre-save hook
-      company: company || undefined
+      company: company || undefined,
+      settings: {
+        preferences: {
+          defaultPlatform: ['facebook', 'twitter', 'instagram', 'linkedin', 'tiktok'].includes(favoritePlatform)
+            ? favoritePlatform
+            : 'facebook'
+        }
+      },
+      metadata: {
+        onboardingProfile: {
+          businessType: businessType || '',
+          primaryGoal: primaryGoal || '',
+          favoritePlatform: favoritePlatform || '',
+          experienceLevel: experienceLevel || '',
+          interests: Array.isArray(interests) ? interests : [],
+          activityPreferences: Array.isArray(activityPreferences) ? activityPreferences : []
+        },
+        toolRecommendations: recommendedTools
+      }
     });
 
     // Generate token
     const token = generateToken(user._id);
+
+    // Create welcome notification
+    try {
+      await createUserNotification(user._id, {
+        type: 'registration',
+        category: 'account',
+        title: 'Welcome to Meritlives!',
+        message: 'Your AI-powered workspace is ready. Let\'s start growing your brand!',
+        action: {
+          label: 'Open Dashboard',
+          url: '/dashboard'
+        }
+      });
+    } catch (notifyError) {
+      console.error('Welcome notification error:', notifyError);
+    }
 
     // Return user data (excluding password)
     res.status(201).json({
@@ -64,7 +132,8 @@ export const signup = async (req, res) => {
         email: user.email,
         company: user.company,
         plan: user.subscription?.plan || 'trial',
-        isEmailVerified: user.isEmailVerified
+        isEmailVerified: user.isEmailVerified,
+        recommendedTools
       }
     });
   } catch (error) {
@@ -125,6 +194,26 @@ export const login = async (req, res) => {
       { expiresIn: tokenExpiry }
     );
 
+    // Create login notification
+    try {
+      await createUserNotification(user._id, {
+        type: 'login',
+        category: 'security',
+        title: 'New Login Detected',
+        message: `You successfully logged in from ${req.ip || 'a new device'}.`,
+        action: {
+          label: 'Security Settings',
+          url: '/profile'
+        }
+      }, {
+        dedupeWindowMinutes: 5 // Avoid spamming if they login multiple times quickly
+      });
+    } catch (notifyError) {
+      console.error('Login notification error:', notifyError);
+    }
+
+    const metadata = extractMetadata(user);
+
     // Return user data
     res.json({
       success: true,
@@ -137,7 +226,8 @@ export const login = async (req, res) => {
         company: user.company,
         plan: user.subscription?.plan || 'trial',
         isEmailVerified: user.isEmailVerified,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        recommendedTools: metadata.toolRecommendations || []
       }
     });
   } catch (error) {
@@ -165,6 +255,8 @@ export const getMe = async (req, res) => {
       });
     }
 
+    const metadata = extractMetadata(user);
+
     res.json({
       success: true,
       user: {
@@ -174,7 +266,8 @@ export const getMe = async (req, res) => {
         company: user.company,
         plan: user.subscription?.plan || 'trial',
         isEmailVerified: user.isEmailVerified,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        recommendedTools: metadata.toolRecommendations || []
       }
     });
   } catch (error) {

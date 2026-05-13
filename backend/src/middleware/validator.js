@@ -52,7 +52,31 @@ export const updateProfileValidation = [
         .optional()
         .trim()
         .isIn(['en', 'es', 'fr', 'de', 'it', 'pt', 'zh', 'ja'])
-        .withMessage('Invalid language')
+        .withMessage('Invalid language'),
+    
+    body('businessType')
+        .optional()
+        .trim(),
+    
+    body('primaryGoal')
+        .optional()
+        .trim(),
+    
+    body('favoritePlatform')
+        .optional()
+        .trim(),
+    
+    body('experienceLevel')
+        .optional()
+        .trim(),
+    
+    body('interests')
+        .optional()
+        .isArray(),
+    
+    body('activityPreferences')
+        .optional()
+        .isArray()
 ];
 // ============================================
 // AD COPY VALIDATION
@@ -217,24 +241,27 @@ export const seoMetaValidation = [
 // ============================================
 
 export const socialMediaValidation = [
-    body('topic')
-        .trim()
-        .notEmpty()
-        .withMessage('Topic is required')
-        .isLength({ min: 2, max: 200 })
-        .withMessage('Topic must be between 2 and 200 characters'),
-    
-    body('platform')
-        .trim()
-        .notEmpty()
-        .withMessage('Platform is required')
-        .isIn(['facebook', 'twitter', 'instagram', 'linkedin', 'tiktok'])
-        .withMessage('Invalid platform'),
-    
+    body().custom((value) => {
+        const topic = value.topic || value.niche || value.customNiche;
+        if (!topic || String(topic).trim().length < 2) {
+            throw new Error('Topic or niche is required');
+        }
+        return true;
+    }),
+
+    body().custom((value) => {
+        const platforms = Array.isArray(value.platforms) ? value.platforms : [];
+        const platform = value.platform;
+        if ((!platform || !String(platform).trim()) && platforms.length === 0) {
+            throw new Error('Platform selection is required');
+        }
+        return true;
+    }),
+
     body('tone')
         .optional()
         .trim()
-        .isIn(['professional', 'casual', 'friendly', 'humorous', 'inspirational'])
+        .isIn(['professional', 'casual', 'friendly', 'humorous', 'inspirational', 'urgent', 'educational'])
         .withMessage('Invalid tone')
 ];
 
