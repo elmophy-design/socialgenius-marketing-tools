@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
+import React, { useState, useEffect, useRef, createContext, useCallback, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 // Ai Icons (outlined variants)
@@ -975,7 +975,7 @@ function App() {
     }
   };
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     if (!auth.token) return;
     try {
       const result = await userApi.getNotifications();
@@ -986,7 +986,7 @@ function App() {
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     }
-  };
+  }, [auth.token]);
 
   // Poll for notifications every 60 seconds when logged in
   useEffect(() => {
