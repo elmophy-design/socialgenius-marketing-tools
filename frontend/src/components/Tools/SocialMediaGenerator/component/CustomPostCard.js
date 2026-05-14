@@ -43,11 +43,11 @@ const CustomPostCard = ({
       ...post,
       content: editedContent,
       hashtags: editedHashtags.split('#').filter(tag => tag.trim()).map(tag => tag.trim()),
-      media: mediaPreview ? [{ type: mediaType, url: mediaPreview }] : []
+      media: mediaPreview ? [{ type: mediaType, url: mediaPreview, file: mediaFile }] : []
     });
     setIsEditing(false);
   };
-
+  
   const handleCancel = () => {
     setEditedContent(post?.content || '');
     setEditedHashtags(post?.hashtags?.join(' #') || '');
