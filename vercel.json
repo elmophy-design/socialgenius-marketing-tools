@@ -1,10 +1,4 @@
 {
-  "installCommand": "npm run frontend:install",
-  "buildCommand": "npm run frontend:build",
-  "outputDirectory": "frontend/build",
-  "framework": "create-react-app",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/(.*)",
