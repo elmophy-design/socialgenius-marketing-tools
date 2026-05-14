@@ -998,7 +998,7 @@ function App() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [auth.token]);
+  }, [auth.token, fetchNotifications]);
 
   const completeAuthSession = async (token, user) => {
     localStorage.setItem('token', token);
