@@ -1,0 +1,62 @@
+/* Tools Grid — force 4 columns desktop, responsive down to 1 column */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 2rem;
+  padding: 2rem 0;
+  align-items: stretch; /* ensures grid items stretch to equal heights */
+}
+
+/* Make each card a full-height flex column so footer/stats sit at bottom */
+.tool-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  color: inherit;
+  display: flex;                /* <-- changed */
+  flex-direction: column;      /* <-- changed */
+  justify-content: space-between; /* push stats/footer to bottom */
+  height: 100%;                /* allow the card to fill grid cell */
+}
+
+/* (Optional) inner content wrapper if you want more spacing control */
+.tool-card .card-body {
+  /* If you choose to wrap card content, this class can hold top content */
+}
+
+/* Hover style (keep same behavior) */
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 32px rgba(0, 74, 173, 0.15);
+  border-color: #004aad;
+}
+
+/* Responsive breakpoints: 3 cols, 2 cols, then 1 column */
+@media (max-width: 1200px) {
+  .tools-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for medium-large screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .tools-grid {
+    grid-template-columns: 1fr; /* single column on small phones */
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+
+  .tool-card {
+    padding: 1.25rem;
+  }
+}

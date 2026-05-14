@@ -1,0 +1,184 @@
+/**
+ * Card.css - Card Component Styles
+ * Matches your project's design system
+ */
+
+/* ============================================
+   BASE CARD STYLES
+   ============================================ */
+
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* ============================================
+   CARD VARIANTS
+   ============================================ */
+
+/* Default */
+.card-default {
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Elevated */
+.card-elevated {
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Outlined */
+.card-outlined {
+  border: 2px solid #e9ecef;
+  box-shadow: none;
+}
+
+/* Flat */
+.card-flat {
+  border: none;
+  box-shadow: none;
+}
+
+/* ============================================
+   CARD PADDING
+   ============================================ */
+
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-small .card-body {
+  padding: 1rem;
+}
+
+.card-padding-medium .card-body {
+  padding: 1.5rem;
+}
+
+.card-padding-large .card-body {
+  padding: 2rem;
+}
+
+/* ============================================
+   CARD STATES
+   ============================================ */
+
+/* Hoverable */
+.card-hoverable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 74, 173, 0.15);
+}
+
+/* Clickable */
+.card-clickable {
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+}
+
+.card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 74, 173, 0.12);
+}
+
+.card-clickable:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   CARD HEADER
+   ============================================ */
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  background: #f9fafc;
+}
+
+.card-header-content {
+  flex: 1;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.card-subtitle {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   CARD BODY
+   ============================================ */
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-padding-none .card-body {
+  padding: 0;
+}
+
+/* ============================================
+   CARD FOOTER
+   ============================================ */
+
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e9ecef;
+  background: #f9fafc;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .card-header {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-padding-large .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-subtitle {
+    font-size: 0.85rem;
+  }
+}

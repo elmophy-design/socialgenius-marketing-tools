@@ -1,0 +1,250 @@
+/* Activity Feed Styles */
+.activity-feed {
+  background: white;
+  border-radius: 16px;
+  border: 2px solid #E5E7EB;
+  overflow: hidden;
+}
+
+/* Header */
+.activity-feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+  border-bottom: 2px solid #F3F4F6;
+}
+
+.activity-feed-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.activity-feed-title svg {
+  color: #3B82F6;
+}
+
+.view-all-btn {
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  color: #374151;
+}
+
+/* Content */
+.activity-feed-content {
+  padding: 24px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.activity-feed-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-feed-content::-webkit-scrollbar-track {
+  background: #F9FAFB;
+}
+
+.activity-feed-content::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
+
+.activity-feed-content::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Empty State */
+.activity-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 16px;
+  color: #D1D5DB;
+}
+
+.empty-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6B7280;
+  margin: 0 0 8px 0;
+}
+
+.empty-subtext {
+  font-size: 0.875rem;
+  color: #9CA3AF;
+  margin: 0;
+}
+
+/* Timeline */
+.activity-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.activity-item:hover {
+  background: #F3F4F6;
+  transform: translateX(4px);
+}
+
+.activity-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #E5E7EB;
+  border-radius: 12px 0 0 12px;
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover::before {
+  background: #3B82F6;
+}
+
+/* Icon */
+.activity-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover .activity-icon {
+  transform: scale(1.1);
+}
+
+/* Content */
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.activity-action {
+  font-weight: 600;
+  color: #111827;
+}
+
+.activity-target {
+  color: #6B7280;
+}
+
+.activity-timestamp {
+  font-size: 0.8125rem;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+/* Status Badge */
+.activity-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.activity-status.success {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.activity-status.pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.activity-status.failed {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .activity-feed-header,
+  .activity-feed-content {
+    padding: 20px;
+  }
+
+  .activity-item {
+    padding: 14px;
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .activity-feed-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .view-all-btn {
+    width: 100%;
+  }
+
+  .activity-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .activity-status {
+    align-self: flex-end;
+  }
+}

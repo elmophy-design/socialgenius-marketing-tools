@@ -1,0 +1,252 @@
+/**
+ * Alert.css - Alert Component Styles
+ * Success, Error, Warning, Info alerts
+ */
+
+/* ============================================
+   ALERT BASE
+   ============================================ */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   ALERT TYPES
+   ============================================ */
+
+.alert-success {
+  background: #e8f5e9;
+  border-left-color: #28a745;
+  color: #1e7e34;
+}
+
+.alert-success .alert-icon {
+  color: #28a745;
+}
+
+.alert-error {
+  background: #ffebee;
+  border-left-color: #dc3545;
+  color: #c82333;
+}
+
+.alert-error .alert-icon {
+  color: #dc3545;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  border-left-color: #ffc107;
+  color: #856404;
+}
+
+.alert-warning .alert-icon {
+  color: #ffc107;
+}
+
+.alert-info {
+  background: #e8f4ff;
+  border-left-color: #004aad;
+  color: #004085;
+}
+
+.alert-info .alert-icon {
+  color: #004aad;
+}
+
+/* ============================================
+   ALERT ICON
+   ============================================ */
+
+.alert-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   ALERT CONTENT
+   ============================================ */
+
+.alert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.alert-message {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.alert-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* ============================================
+   ALERT CLOSE BUTTON
+   ============================================ */
+
+.alert-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.alert-close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+
+.toast {
+  position: fixed;
+  z-index: 10000;
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+.toast-viewport {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.toast-viewport .toast {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+  bottom: auto;
+  pointer-events: auto;
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Toast Positions */
+.toast-top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.toast-top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.toast-top-center {
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast-bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.toast-bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.toast-bottom-center {
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast .alert {
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .alert {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .alert-title {
+    font-size: 0.95rem;
+  }
+
+  .alert-message {
+    font-size: 0.875rem;
+  }
+
+  .toast {
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    transform: none !important;
+  }
+
+  .toast .alert {
+    min-width: auto;
+    max-width: none;
+  }
+}

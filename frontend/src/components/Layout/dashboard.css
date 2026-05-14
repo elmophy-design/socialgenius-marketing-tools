@@ -1,0 +1,269 @@
+/* Header & Navigation */
+.header {
+    background: #004aad;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 4px 16px rgba(0, 74, 173, 0.2);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo-icon {
+    font-size: 2rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #004aad, #0066ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Tools Grid — force 4 columns desktop, responsive down to 1 column */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 2rem;
+  padding: 2rem 0;
+  align-items: stretch; /* ensures grid items stretch to equal heights */
+}
+
+/* Make each card a full-height flex column so footer/stats sit at bottom */
+.tool-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  color: inherit;
+  display: flex;                /* <-- changed */
+  flex-direction: column;      /* <-- changed */
+  justify-content: space-between; /* push stats/footer to bottom */
+  height: 100%;                /* allow the card to fill grid cell */
+}
+
+/* (Optional) inner content wrapper if you want more spacing control */
+.tool-card .card-body {
+  /* If you choose to wrap card content, this class can hold top content */
+}
+
+/* Hover style (keep same behavior) */
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 32px rgba(0, 74, 173, 0.15);
+  border-color: #004aad;
+}
+
+/* Dashboard Recommendations */
+.dashboard-recommendations {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 74, 173, 0.1);
+}
+
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.recommendation-header h2 {
+  color: #004aad;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.ai-badge {
+  background: linear-gradient(135deg, #004aad, #0066ff);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.recommendation-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  gap: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  border: 1px solid #eef2f6;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 74, 173, 0.12);
+  border-color: #004aad;
+}
+
+.recommendation-icon {
+  font-size: 2rem;
+  background: #f0f7ff;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.recommendation-content h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.recommendation-content p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive breakpoints: 3 cols, 2 cols, then 1 column */
+@media (max-width: 1200px) {
+  .tools-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for medium-large screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .tools-grid {
+    grid-template-columns: 1fr; /* single column on small phones */
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+
+  .tool-card {
+    padding: 1.25rem;
+  }
+}
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+/* About and Contact Sections */
+.about-section, .contact-section {
+    padding: 4rem 0;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+}
+
+.about-section h2, .contact-section h2 {
+    color: #004aad;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.about-section p, .contact-section p {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+}
+
+.contact-section a {
+    color: #004aad;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+    background: #004aad;
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+    opacity: 0.9;
+}
+
+.footer p:first-child {
+    font-weight: 600;
+}

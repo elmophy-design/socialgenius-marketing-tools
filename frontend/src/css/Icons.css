@@ -1,0 +1,150 @@
+/* ============================================
+   ICON STYLES - Global Color & Sizing
+   ============================================ */
+
+/* Tool Icons - Dashboard & Landing */
+.tool-icon,
+.quick-action-icon,
+.tool-preview-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.tool-icon svg,
+.quick-action-icon svg,
+.tool-preview-icon svg,
+.feature-icon svg,
+.method-icon svg,
+.social-icon svg,
+.dropdown-chevron svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: block;
+}
+
+.tool-icon:hover,
+.quick-action-icon:hover,
+.tool-preview-icon:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Feature Icons */
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+/* Contact Method Icons */
+.method-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 2rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.method-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.contact-method:hover .method-icon {
+  transform: translateY(-4px) scale(1.05);
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Social Icons */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-icon svg {
+  width: 60%;
+  height: 60%;
+  display: block;
+}
+
+.social-icon:hover {
+  transform: translateY(-4px) scale(1.15);
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Dropdown Chevron */
+.dropdown-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  transition: transform 0.2s ease;
+  margin-left: 0.5rem;
+}
+
+.dropdown-chevron svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.user-info.open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+/* Ensure icons don't have text decoration */
+.social-icon,
+.method-icon,
+.feature-icon {
+  text-decoration: none;
+  outline: none;
+}
+
+/* Icon animation on hover */
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.feature-card:hover .feature-icon,
+.tool-card:hover .tool-icon,
+.contact-method:hover .method-icon {
+  animation: iconFloat 0.6s ease-in-out;
+}

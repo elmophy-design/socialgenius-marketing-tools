@@ -1,0 +1,155 @@
+.payment-gateway-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1100;
+}
+
+.payment-gateway-modal {
+  position: relative;
+  width: min(760px, 100%);
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border-radius: 1.5rem;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.26);
+  padding: 1.5rem;
+}
+
+.payment-gateway-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 1.9rem;
+  cursor: pointer;
+}
+
+.payment-gateway-header h2 {
+  margin: 0.35rem 0 0.5rem;
+  color: #0f172a;
+}
+
+.payment-gateway-header p,
+.payment-gateway-card p,
+.payment-gateway-note {
+  color: #5b6b84;
+  line-height: 1.65;
+}
+
+.payment-gateway-kicker {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.payment-gateway-body {
+  margin-top: 1.25rem;
+}
+
+.payment-gateway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.payment-gateway-card {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 1.1rem;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.payment-gateway-card.is-disabled {
+  opacity: 0.82;
+}
+
+.payment-gateway-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.payment-gateway-pill,
+.payment-gateway-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.65rem;
+}
+
+.payment-gateway-pill.is-paystack {
+  background: rgba(5, 150, 105, 0.12);
+  color: #047857;
+}
+
+.payment-gateway-pill.is-paypal {
+  background: rgba(29, 78, 216, 0.12);
+  color: #1d4ed8;
+}
+
+.payment-gateway-status.is-live {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.payment-gateway-status.is-pending {
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+}
+
+.payment-gateway-button {
+  width: 100%;
+  margin-top: 0.75rem;
+  border: none;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+
+.payment-gateway-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.payment-gateway-note {
+  margin: 1rem 0 0;
+}
+
+.payment-gateway-error {
+  margin: 1rem 0 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.payment-gateway-loading {
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .payment-gateway-modal {
+    padding: 1.15rem;
+  }
+}

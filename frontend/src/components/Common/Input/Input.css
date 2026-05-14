@@ -1,0 +1,198 @@
+/**
+ * Input.css - Input Component Styles
+ * Matches your project's blue theme
+ */
+
+/* ============================================
+   INPUT CONTAINER
+   ============================================ */
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.input-full-width {
+  width: 100%;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.input-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.input-required {
+  color: #dc3545;
+  margin-left: 0.25rem;
+}
+
+/* ============================================
+   INPUT WRAPPER
+   ============================================ */
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   INPUT FIELD
+   ============================================ */
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.input-field::placeholder {
+  color: #999;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #004aad;
+  box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1);
+}
+
+.input-field:disabled {
+  background: #f8f9fa;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Input with icons */
+.input-with-icon-left {
+  padding-left: 44px;
+}
+
+.input-with-icon-right {
+  padding-right: 44px;
+}
+
+/* ============================================
+   ICONS
+   ============================================ */
+
+.input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  pointer-events: none;
+}
+
+.input-icon-left {
+  left: 14px;
+}
+
+.input-icon-right {
+  right: 14px;
+}
+
+.input-focused .input-icon {
+  color: #004aad;
+}
+
+/* ============================================
+   PASSWORD TOGGLE
+   ============================================ */
+
+.input-password-toggle {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s ease;
+}
+
+.input-password-toggle:hover {
+  color: #004aad;
+}
+
+.input-password-toggle:focus {
+  outline: none;
+  color: #004aad;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.input-has-error .input-field {
+  border-color: #dc3545;
+}
+
+.input-has-error .input-field:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.input-error {
+  display: block;
+  color: #dc3545;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+.input-helper {
+  display: block;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.input-disabled {
+  opacity: 0.6;
+}
+
+.input-disabled .input-label {
+  color: #999;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .input-field {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+
+  .input-with-icon-left {
+    padding-left: 40px;
+  }
+
+  .input-with-icon-right {
+    padding-right: 40px;
+  }
+}

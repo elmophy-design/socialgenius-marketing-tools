@@ -1,0 +1,87 @@
+/* ============================================
+   404 PAGE STYLES
+   ============================================ */
+
+.not-found-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+  padding: var(--space);
+}
+
+.not-found-container {
+  text-align: center;
+  max-width: 600px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.not-found-container h1 {
+  font-size: 8rem;
+  font-weight: 900;
+  margin-bottom: var(--space-sm);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.not-found-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: var(--space);
+  color: var(--dark);
+}
+
+.not-found-container p {
+  font-size: 1.125rem;
+  color: var(--gray-600);
+  margin-bottom: var(--space-xl);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: var(--space);
+  justify-content: center;
+}
+
+.not-found-actions .btn-primary,
+.not-found-actions .btn-outline {
+  min-width: 140px;
+}
+
+/* Responsive 404 */
+@media (max-width: 768px) {
+  .not-found-container h1 {
+    font-size: 6rem;
+  }
+  
+  .not-found-container h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-container h1 {
+    font-size: 4rem;
+  }
+  
+  .not-found-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .not-found-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .not-found-actions button {
+    width: 100%;
+    max-width: 200px;
+  }
+}
